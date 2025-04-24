@@ -3,10 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 venv/
-.env/
 .venv/
+.env/
 
 # Environment variable files
 .env
@@ -53,15 +53,19 @@ coverage.xml
 # macOS
 .DS_Store
 
-# Docker
-**/Dockerfile
-**/docker-compose.yml
+# Docker volumes and local DBs
+*.sqlite3
+*.db
+postgres/                # Docker volume (only if mounted as a folder)
+**/pgdata/               # Common volume mount name
+docker-data/             # If you mount data to a named folder
 
-# Build
+# Build artifacts
 build/
 dist/
 *.egg-info/
 .eggs/
 
-# Misc
-*.sqlite3
+# Alembic
+alembic/versions/*.pyc
+alembic/__pycache__/
