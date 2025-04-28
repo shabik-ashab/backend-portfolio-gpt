@@ -8,7 +8,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from app.db.base import Base
-from app.models.user import User
+from app.models import user, resume, resume_section, resume_skills, resume_insight
 
 
 load_dotenv()
