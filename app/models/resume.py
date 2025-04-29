@@ -17,5 +17,5 @@ class Resume(Base):
 
     user = relationship("User", back_populates="resumes")
     sections = relationship("ResumeSection", back_populates="resume", cascade="all, delete-orphan")
-    skills = relationship("ResumeSkill", back_populates="resume", cascade="all, delete-orphan")
+    skills = relationship("ResumeSkills", back_populates="resume", cascade="all, delete-orphan")
     insights = relationship("ResumeInsight", back_populates="resume", cascade="all, delete-orphan")

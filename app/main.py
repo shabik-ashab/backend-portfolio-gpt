@@ -1,11 +1,10 @@
-# main.py
-
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.db.session import SessionLocal
-from app.models.user import User
-from app.db.schemas import UserCreate, UserOut
 from typing import List
+
+from app.db.session import SessionLocal
+from app.models import User, Resume
+from app.schemas import UserCreate, UserOut
 
 app = FastAPI()
 
@@ -24,7 +23,17 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already exists")
 
-    new_user = User(name=user.name, email=user.email)
+    new_user = User(
+        name=user.name,
+        email=user.email,
+        linkedin_url=user.linkedin_url,
+        github_url=user.github_url,
+        portfolio_url=user.portfolio_url,
+        blog_url=user.blog_url,
+        x_twitter_url=user.x_twitter_url,
+        facebook_url=user.facebook_url,
+        other_links=user.other_links,
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
