@@ -1,6 +1,9 @@
 import os
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.utils.pdf_extractor import extract_text_from_pdf
+from app.models.resume import Resume 
+from app.db.session import SessionLocal
+from datetime import datetime
 from uuid import uuid4
 
 router = APIRouter()
@@ -29,7 +32,19 @@ async def upload_resume(file: UploadFile = File(...)):
         extracted_text = extract_text_from_pdf(file_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
+     # Save to DB
+    db = SessionLocal()
+    resume = Resume(
+        id=file_id,
+        user_id=None,  
+        file_name=file.filename,
+        raw_text=extracted_text,
+        uploaded_at=datetime.utcnow(),
+        parsed_at=None
+    )
+    db.add(resume)
+    db.commit()
+    db.refresh(resume)
     return {
         "file_id": file_id,
         "filename": file.filename,
