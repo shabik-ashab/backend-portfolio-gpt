@@ -10,18 +10,28 @@ from app.db.session import SessionLocal
 UPLOAD_DIR = "uploaded_resumes"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-MIN_WORD_COUNT = 60  # You can adjust this threshold
+MIN_WORD_COUNT = 60  
 
-def process_resume_upload(file: UploadFile, user_id: str):
+MAX_FILE_SIZE_MB = 5  # Limit to 5MB
+MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024 
+
+async def process_resume_upload(file: UploadFile, user_id: str):
+    contents = await file.read()
+    
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum size allowed is {MAX_FILE_SIZE_MB}MB."
+        )
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed.")
+    
 
     file_id = str(uuid4())
     file_path = os.path.join(UPLOAD_DIR, f"{file_id}.pdf")
 
     with open(file_path, "wb") as f:
-        content = file.file.read()
-        f.write(content)
+        f.write(contents)
 
     # Try normal PDF text extraction
     try:

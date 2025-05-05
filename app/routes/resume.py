@@ -8,4 +8,4 @@ router = APIRouter()
 @router.post("/upload-resume/")
 async def upload_resume(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     # Pass the user_id to the service function
-    return process_resume_upload(file, user_id=current_user.id)
+    return await process_resume_upload(file, user_id=current_user.id)
