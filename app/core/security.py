@@ -1,8 +1,12 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import jwt
+from dotenv import load_dotenv
+import os
 
-SECRET_KEY = "your-secret-key"
+load_dotenv()
+
+SECRET_KEY = os.getenv("AUTH_SECRET", "fallback-secret")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
