@@ -10,5 +10,21 @@ services:
       - postgres:/var/lib/postgressql/data
     ports:
       - '5432:5432'
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+  celery_worker:
+    build: .
+    command: celery -A app.celery_worker.celery_app worker --loglevel=info
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/portfolio_db
+
+
 volumes:
   postgres:

@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 from typing import Optional
+from app.models.resume import TaskStatusEnum 
 
 # Resume Input Schema (for creating resumes)
 class ResumeCreate(BaseModel):
@@ -20,6 +21,7 @@ class ResumeOut(BaseModel):
     raw_text: str
     uploaded_at: datetime
     parsed_at: Optional[datetime] = None
+    task_status: TaskStatusEnum  
 
     class Config:
         orm_mode = True  # For working with SQLAlchemy models
